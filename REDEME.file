@@ -1,0 +1,239 @@
+# StudentMaster AI — Backend
+
+> Complete Node.js + Express + MongoDB hackathon backend with 7 AI-powered student features.
+
+**Architecture**
+- **Backend**: Express.js on Node.js (port **8000**)
+- **Database**: MongoDB with 7 Mongoose schemas
+- **Features**: Presentation Coach, English Guru, YouTube Quality, Career Predictor, Daily Manager, Brain Dashboard, India-First Localization
+- **Deployment**: Docker + docker-compose ready
+
+## 🏃‍♂️ Quick Start
+
+### Backend (Node.js + Express)
+```bash
+cd backend && npm install && npm run dev
+```
+
+### Frontend (React + Three.js)
+```bash
+cd frontend && npm install && npm run dev
+```
+
+The front‑end uses **Vite** and runs on **http://localhost:3000**. It currently displays a placeholder page — extend it with components for each feature.
+
+### Environment Setup
+Add MongoDB Atlas connection to `.env`:
+```
+MONGO_URI=mongodb+srv://admin:PASSWORD@cluster0.xxx.mongodb.net/studentmaster
+```
+
+**Runs on:**
+- Backend: http://localhost:8000
+- Frontend: http://localhost:5173
+
+### Docker Setup
+
+```bash
+docker-compose up --build
+```
+
+Starts:
+- Node.js backend (port 8000)
+- MongoDB (port 27017)
+
+## 📚 API Routes — 7 Features
+
+All endpoints follow REST conventions and return JSON.
+
+### 1️⃣ Presentation Coach
+- **POST** `/api/presentation/analyze` — Analyze speech transcript
+  - body: `{ transcript: string, duration_seconds?: number }`
+  - returns: `{ score, voice_confidence, eye_contact, filler_count, pacing_wpm, tips }`
+
+### 2️⃣ English Speaking Guru
+- **POST** `/api/english/analyze` — Fluency & grammar analysis
+  - body: `{ text: string, interview_question?: string }`
+  - returns: `{ fluency_score, readability_score, fluency_wpm, corrections, exercises, lexical_diversity }`
+
+### 3️⃣ YouTube Quality Checker
+- **POST** `/api/youtube/analyze` — Video metadata scoring
+  - body: `{ title, description, tags[], transcript?, view_count?, like_count? }`
+  - returns: `{ score, relevance_score, sentiment_score, tips, breakdown }`
+
+### 4️⃣ Career Predictor 2030
+- **POST** `/api/career/predict` — Career path prediction
+  - body: `{ skills?: [], interests?: [], gpa?: number, top?: number }`
+  - returns: `{ results: [...{ career_id, job_match, salary_prediction, missing_skills, resources }] }`
+
+### 5️⃣ Daily Life Manager
+- **POST** `/api/daily/tasks` — Create task
+- **GET** `/api/daily/tasks` — List tasks
+- **GET** `/api/daily/tasks/:id` — Get task
+- **PUT** `/api/daily/tasks/:id` — Update task
+- **DELETE** `/api/daily/tasks/:id` — Delete task
+- **POST** `/api/daily/plan` — Generate daily schedule
+
+### 6️⃣ 3D Brain Dashboard
+- **GET** `/api/brain/metrics?user_id=...` — Get brain region scores
+  - returns: `{ brain_score, region_scores: { prefrontal_cortex, hippocampus, ... }, orb_scores: { presentation, english, youtube, ... } }`
+
+### 7️⃣ India-First Localization
+- **GET** `/api/india/localize?lang=hi|en` — Localized recommendations
+  - returns: `{ locale, recommendations: { topSectors, scholarships, govtPrograms, hiringTips } }`
+
+## 📁 Project Structure
+
+```
+.
+├── server.js                    # Express app entry
+├── package.json                 # Dependencies
+├── docker-compose.yml           # Docker orchestration
+├── Dockerfile                   # Node.js container
+│
+├── config/
+│   └── db.js                    # MongoDB/Mongoose connection
+│
+├── models/                      # Mongoose schemas (7 collections)
+│   ├── User.js
+│   ├── Presentation.js
+│   ├── EnglishSession.js
+│   ├── YoutubeAnalysis.js
+│   ├── CareerProfile.js
+│   ├── Task.js
+│   └── DashboardData.js
+│
+├── controllers/                 # Feature logic
+│   ├── presentationController.js
+│   ├── englishGuruController.js
+│   ├── youtubeController.js
+│   ├── careerController.js
+│   ├── dailyController.js
+│   ├── brainController.js
+│   ├── indiaController.js
+│   └── studentController.js
+│
+├── routes/                      # API routes
+│   ├── presentation.js
+│   ├── guru.js
+│   ├── youtube.js
+│   ├── career.js
+│   ├── daily.js
+│   ├── brain.js
+│   ├── india.js
+│   └── students.js
+│
+├── middleware/
+│   └── locale.js                # i18n middleware (auto-detect lang)
+│
+├── locales/
+│   ├── en.json
+│   └── hi.json
+│
+├── seed/
+│   └── seed.js                  # Sample data (users, tasks, careers)
+│
+├── public/                      # 3D Dashboard (Three.js)
+│   ├── index.html
+│   ├── main.js
+│   └── styles.css
+│
+└── README.md                    # This file
+```
+
+## 📊 Database Collections
+
+| Collection | Purpose |
+|---|---|
+| `users` | Student profiles with college, language, GPA |
+| `presentations` | Presentation analysis results |
+| `english_sessions` | English fluency records |
+| `youtube_analysis` | Video quality analysis |
+| `career_profiles` | Career path predictions |
+| `tasks` | Daily task management |
+| `dashboard_data` | Aggregated metrics for UI |
+
+## 🌐 Environment Variables
+
+```
+PORT=8000
+MONGO_URI=mongodb://localhost:27017/studentmaster
+NODE_ENV=development
+```
+
+## 🔧 Commands
+
+```bash
+npm run dev      # Development with nodemon
+npm start        # Production
+npm run seed     # Seed sample data
+```
+
+## 📦 Dependencies
+
+```json
+{
+  "express": "^4.18.2",
+  "mongoose": "^7.5.0",
+  "cors": "^2.8.5",
+  "dotenv": "^16.3.1",
+  "multer": "^1.4.5"
+}
+```
+
+## 🎯 Sample Requests
+
+### Presentation Analysis
+```bash
+curl -X POST http://localhost:8000/api/presentation/analyze \
+  -H "Content-Type: application/json" \
+  -d '{
+    "transcript": "Um hello everyone today I want to talk about machine learning basically it is really important",
+    "duration_seconds": 30
+  }'
+```
+
+### English Fluency Check
+```bash
+curl -X POST http://localhost:8000/api/english/analyze \
+  -H "Content-Type: application/json" \
+  -d '{
+    "text": "I was given the project and it was completed by the team. We need more testing."
+  }'
+```
+
+### Career Prediction
+```bash
+curl -X POST http://localhost:8000/api/career/predict \
+  -H "Content-Type: application/json" \
+  -d '{
+    "skills": ["Python", "SQL", "Machine Learning"],
+    "gpa": 3.7,
+    "top": 3
+  }'
+```
+
+### Get Brain Metrics
+```bash
+curl http://localhost:8000/api/brain/metrics
+```
+
+### Localized Content
+```bash
+curl 'http://localhost:8000/api/india/localize?lang=hi'
+```
+
+## 🚀 Deployment
+
+### Heroku
+```bash
+git push heroku main
+```
+
+### AWS/GCP/Azure
+Use Docker image from docker-compose.yml
+
+### Render/Railway
+Connect repo and deploy with `npm start` as start command
+
+-
