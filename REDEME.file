@@ -1,6 +1,6 @@
 # StudentMaster AI — Backend
 
-> Complete Node.js + Express + MongoDB hackathon backend with 7 AI-powered student features.
+> Complete Node.js + Express + MongoDB backend with 7 AI-powered student features.
 
 **Architecture**
 - **Backend**: Express.js on Node.js (port **8000**)
